@@ -1,0 +1,43 @@
+Nessus离线更新插件下载 方案一 常规离线下载安装
+1、 关闭nessus服务 ，命令：/etc/init.d/nessusd stop
+2、获取挑战码，命令/opt/nessus/sbin/nessuscli fetch --challenge
+挑战码示例： Challenge code: e30adc174d20382a427ddc4f4d42efef11f2bb66
+3、获取Active code，
+·····登录网址http://www.tenable.com/products/nessus-home，输入邮箱信息获取获取Active code，
+·····Active code示例：4955-491C-9238-F1B7-9981
+【名字随便填，邮箱可多次使用，但一个小时内只能接受一次验证码】
+4、登录https://plugins.nessus.org/offline.php，输入Challenge code和Active code
+5、下载all-2.0.tar.gz与nessus.license文件【虚拟机版无需nessus.license】
+6、下载好后，终端运行命令：【命名不分先后】
+/opt/nessus/sbin/nessuscli update /root/Downloads/all-2.0.tar.gz
+/opt/nessus/sbin/nessuscli fecth --register-offline nessus.license
+7、重启服务，命令：/etc/init.d/nessusd restart
+·
+··
+
+**Nessus离线更新插件下载 方案二 无需挑战码 适合于虚拟机版本 **
+1、获取Active code，
+·····登录网址http://www.tenable.com/products/nessus-home，输入邮箱信息获取获取Active code，
+·····Active code示例：4955-491C-9238-F1B7-9981
+2、将自己的Activation Code代码拼接到链https://plugins.nessus.org/register.php?serial=后。
+拼接示例： https://plugins.nessus.org/register.php?serial=9962-D02F-4C59-1D79-AD44
+访问后会得到加密后的账户/密码。
+
+[访问结果示例：](https://img-blog.csdnimg.cn/20191106114450786.png在这里插入图片描述、
+其中账号是：53fa5ded3899e511990cd92b0d78e67c
+其中密码是：bd98ed66f0c929700e0f8b2b9be3a296
+3、再次拼接链接，获取最终下载链接
+https://plugins.nessus.org/v2/nessus.php?f=all-2.0.tar.gz&u=53fa5ded3899e511990cd92b0d78e67c&p=bd98ed66f0c929700e0f8b2b9be3a296
+(替换自己的账号和密码，只能用一次，注意下载时不要中断）
+
+4、访问成功后，浏览器自动下载名为 all-2.0.tar.gz 的插件。
+
+5、更新插件：
+上传插件到虚拟机 /root目录下，命令行下执行 ： ./nessus-plugins-update all-2.0.tar.gz
+
+扩展：虚拟机直装版离线更新插件
+
+下载Nessus离线插件包，默认名称为all-2.0.tar.gz，
+使用XShell登陆Nessus 8服务器后，拖入插件包上传，或使用SFTP上传到/root目录，
+然后执行./nessus-plugins-update all-2.0.tar.gz，进行自动更新
+原因：虚拟机版不需要license信息即可安装，可以直接复制最新版插件更新
